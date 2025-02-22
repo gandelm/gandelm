@@ -17,10 +17,11 @@ message GetRequest { string catalog_id = 1; }
 message GetResponse { Catalog catalog = 1; }
 
 message CreateRequest {
-  string version_id = 1;
+  string version = 1;
   string name = 2;
   string description = 3;
-  repeated Artifact artifacts = 4;
+  uint32 priority = 4;
+  repeated Artifact artifacts = 5;
 }
 
 message CreateResponse { Catalog catalog = 1; }
@@ -38,8 +39,9 @@ message Catalog {
   string name = 2;
   string description = 3;
   string version = 4;
-  google.protobuf.Timestamp created_at = 5;
-  google.protobuf.Timestamp updated_at = 6;
+  uint32 priority = 5;
+  google.protobuf.Timestamp created_at = 6;
+  google.protobuf.Timestamp updated_at = 7;
 }
 
 message Artifact {

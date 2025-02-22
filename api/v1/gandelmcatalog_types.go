@@ -28,18 +28,24 @@ type GandelmCatalogSpec struct {
 	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
 
-	ID          string   `json:"id"`
-	Name        string   `json:"name"`
-	Version     string   `json:"version"`
-	Priority    int      `json:"priority"`
-	Description string   `json:"description,omitempty"`
-	Labels      []string `json:"labels,omitempty"`
+	ID       string `json:"id"`
+	Name     string `json:"name"`
+	Version  string `json:"version"`
+	Priority uint32 `json:"priority"`
+
+	Description  string            `json:"description,omitempty"`
+	Labels       []string          `json:"labels,omitempty"`
+	ArtifactTags map[string]string `json:"artifactTags,omitempty"`
 }
 
 // GandelmCatalogStatus defines the observed state of GandelmCatalog.
 type GandelmCatalogStatus struct {
 	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
+	Initializing bool `json:"initializing"`
+	Synced       bool `json:"synced"`
+	Updating     bool `json:"updating"`
+	Terminating  bool `json:"terminating"`
 }
 
 // +kubebuilder:object:root=true
