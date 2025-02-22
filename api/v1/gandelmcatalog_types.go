@@ -28,8 +28,16 @@ type GandelmCatalogSpec struct {
 	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
 
-	// Foo is an example field of GandelmCatalog. Edit gandelmcatalog_types.go to remove/update
-	Foo string `json:"foo,omitempty"`
+	ID          string   `json:"id"`
+	Name        string   `json:"name"`
+	Version     string   `json:"version"`
+	Description string   `json:"description,omitempty"`
+	Labels      []string `json:"labels,omitempty"`
+
+	Endpoint   string `json:"endpoint"`
+	Entrypoint string `json:"entrypoint"`
+	CreatedAt  string `json:"created_at"`
+	UpdatedAt  string `json:"updated_at"`
 }
 
 // GandelmCatalogStatus defines the observed state of GandelmCatalog.
