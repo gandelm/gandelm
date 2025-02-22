@@ -36,8 +36,6 @@ type GandelmCatalogSpec struct {
 
 	Endpoint   string `json:"endpoint"`
 	Entrypoint string `json:"entrypoint"`
-	CreatedAt  string `json:"created_at"`
-	UpdatedAt  string `json:"updated_at"`
 }
 
 // GandelmCatalogStatus defines the observed state of GandelmCatalog.

@@ -39,8 +39,6 @@ spec:
           spec:
             description: GandelmCatalogSpec defines the desired state of GandelmCatalog.
             properties:
-              created_at:
-                type: string
               description:
                 type: string
               endpoint:
@@ -55,17 +53,13 @@ spec:
                 type: array
               name:
                 type: string
-              updated_at:
-                type: string
               version:
                 type: string
             required:
-            - created_at
             - endpoint
             - entrypoint
             - id
             - name
-            - updated_at
             - version
             type: object
           status:

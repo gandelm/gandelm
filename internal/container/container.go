@@ -1,21 +1,39 @@
 package container
 
-import "sigs.k8s.io/controller-runtime/pkg/client"
+import (
+	"github.com/gandelm/gandelm/internal/container/config"
+	"github.com/gandelm/gandelm/internal/container/github"
+	"sigs.k8s.io/controller-runtime/pkg/client"
+)
 
 type Containerer interface {
-	KubeClient() client.Client
+	Kubernetes() client.Client
+	Github() github.GithubClient
+	Config() config.Config
 }
 
 type Container struct {
-	client client.Client
+	kubernetes client.Client
+	github     github.GithubClient
+	config     config.Config
 }
 
-func (c *Container) KubeClient() client.Client {
-	return c.client
+func (c *Container) Kubernetes() client.Client {
+	return c.kubernetes
 }
 
-func NewContainer(client client.Client) Containerer {
+func (c *Container) Github() github.GithubClient {
+	return c.github
+}
+
+func (c *Container) Config() config.Config {
+	return c.config
+}
+
+func NewContainer(kubernetes client.Client) Containerer {
 	return &Container{
-		client: client,
+		kubernetes: kubernetes,
+		config:     config.NewConfig(),
+		// github:     github,
 	}
 }
