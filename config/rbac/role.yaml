@@ -8,6 +8,7 @@ rules:
   - gandelm.com
   resources:
   - gandelmcatalogs
+  - gandelms
   verbs:
   - create
   - delete
@@ -20,12 +21,14 @@ rules:
   - gandelm.com
   resources:
   - gandelmcatalogs/finalizers
+  - gandelms/finalizers
   verbs:
   - update
 - apiGroups:
   - gandelm.com
   resources:
   - gandelmcatalogs/status
+  - gandelms/status
   verbs:
   - get
   - patch

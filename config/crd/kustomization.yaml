@@ -3,6 +3,7 @@
 # It should be run by config/default
 resources:
 - bases/gandelm.com_gandelmcatalogs.yaml
+- bases/gandelm.com_gandelms.yaml
 # +kubebuilder:scaffold:crdkustomizeresource
 
 patches:
