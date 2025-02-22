@@ -39,6 +39,21 @@ spec:
           spec:
             description: GandelmSpec defines the desired state of Gandelm.
             properties:
+              artifacts:
+                items:
+                  properties:
+                    id:
+                      type: string
+                    url:
+                      type: string
+                    version:
+                      type: string
+                  required:
+                  - id
+                  - url
+                  - version
+                  type: object
+                type: array
               endpoint:
                 type: string
               entrypoint:
