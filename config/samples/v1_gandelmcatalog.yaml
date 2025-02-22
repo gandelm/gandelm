@@ -1,0 +1,9 @@
+apiVersion: gandelm.com/v1
+kind: GandelmCatalog
+metadata:
+  labels:
+    app.kubernetes.io/name: gandelm
+    app.kubernetes.io/managed-by: kustomize
+  name: gandelmcatalog-sample
+spec:
+  # TODO(user): Add fields here

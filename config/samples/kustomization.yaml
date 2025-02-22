@@ -1,0 +1,4 @@
+## Append samples of your project ##
+resources:
+- v1_gandelmcatalog.yaml
+# +kubebuilder:scaffold:manifestskustomizesamples

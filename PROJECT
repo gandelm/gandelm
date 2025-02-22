@@ -7,4 +7,13 @@ layout:
 - go.kubebuilder.io/v4
 projectName: gandelm
 repo: github.com/gandelm/gandelm
+resources:
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  domain: gandelm.com
+  kind: GandelmCatalog
+  path: github.com/gandelm/gandelm/api/v1
+  version: v1
 version: "3"
