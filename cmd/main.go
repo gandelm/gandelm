@@ -17,13 +17,18 @@ limitations under the License.
 package main
 
 import (
+	"context"
 	"crypto/tls"
 	"flag"
+	"fmt"
 	"os"
+	"os/signal"
 	"path/filepath"
+	"syscall"
 
 	// Import all Kubernetes client auth plugins (e.g. Azure, GCP, OIDC, etc.)
 	// to ensure that exec-entrypoint and run can make use of them.
+	"golang.org/x/sync/errgroup"
 	_ "k8s.io/client-go/plugin/pkg/client/auth"
 
 	"k8s.io/apimachinery/pkg/runtime"
@@ -38,6 +43,8 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/webhook"
 
 	gandelmcomv1 "github.com/gandelm/gandelm/api/v1"
+	"github.com/gandelm/gandelm/cmd/server"
+	"github.com/gandelm/gandelm/internal/container"
 	"github.com/gandelm/gandelm/internal/controller"
 	// +kubebuilder:scaffold:imports
 )
@@ -236,9 +243,31 @@ func main() {
 		os.Exit(1)
 	}
 
-	setupLog.Info("starting manager")
-	if err := mgr.Start(ctrl.SetupSignalHandler()); err != nil {
-		setupLog.Error(err, "problem running manager")
-		os.Exit(1)
+	// _, err = config.NewConfigFromFlags()
+	// if err != nil {
+	// 	panic(err)
+	// }
+
+	container := container.NewContainer(mgr.GetClient())
+
+	ctx := context.Background()
+	eg, ctx := errgroup.WithContext(ctx)
+	eg.Go(func() error {
+		return mgr.Start(ctrl.SetupSignalHandler())
+	})
+	eg.Go(func() error {
+		return server.Start(container)
+	})
+
+	quit := make(chan os.Signal, 1)
+	defer signal.Stop(quit)
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+	select {
+	case <-ctx.Done():
+		fmt.Println("ctx.Done() received")
+		break
+	case sig := <-quit:
+		fmt.Printf("Signal received: %v\n", sig)
+		break
 	}
 }
