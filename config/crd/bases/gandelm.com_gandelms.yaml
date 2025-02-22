@@ -39,10 +39,13 @@ spec:
           spec:
             description: GandelmSpec defines the desired state of Gandelm.
             properties:
-              foo:
-                description: Foo is an example field of Gandelm. Edit gandelm_types.go
-                  to remove/update
+              endpoint:
                 type: string
+              entrypoint:
+                type: string
+            required:
+            - endpoint
+            - entrypoint
             type: object
           status:
             description: GandelmStatus defines the observed state of Gandelm.

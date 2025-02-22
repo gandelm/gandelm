@@ -41,10 +41,6 @@ spec:
             properties:
               description:
                 type: string
-              endpoint:
-                type: string
-              entrypoint:
-                type: string
               id:
                 type: string
               labels:
@@ -53,13 +49,14 @@ spec:
                 type: array
               name:
                 type: string
+              priority:
+                type: integer
               version:
                 type: string
             required:
-            - endpoint
-            - entrypoint
             - id
             - name
+            - priority
             - version
             type: object
           status:

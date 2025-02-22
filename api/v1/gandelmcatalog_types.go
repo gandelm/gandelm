@@ -31,11 +31,9 @@ type GandelmCatalogSpec struct {
 	ID          string   `json:"id"`
 	Name        string   `json:"name"`
 	Version     string   `json:"version"`
+	Priority    int      `json:"priority"`
 	Description string   `json:"description,omitempty"`
 	Labels      []string `json:"labels,omitempty"`
-
-	Endpoint   string `json:"endpoint"`
-	Entrypoint string `json:"entrypoint"`
 }
 
 // GandelmCatalogStatus defines the observed state of GandelmCatalog.

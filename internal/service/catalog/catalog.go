@@ -43,8 +43,7 @@ func (c *CatalogService) List(ctx context.Context, request *connect.Request[cata
 		Name:        "sample",
 		Version:     "1.2.0",
 		Description: "This is a sample catalog",
-		Endpoint:    "https://endpoint.gandelm.com",
-		Entrypoint:  "https://entrypoint.gandelm.com",
+		Priority:    0,
 	}
 	catalog.Spec = spec
 
