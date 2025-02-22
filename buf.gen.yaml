@@ -11,3 +11,6 @@ plugins:
   - local: protoc-gen-connect-go
     out: generated
     opt: paths=source_relative
+  # - local: bin/protoc-gen-gandelm
+  #   out: generated
+  #   opt: paths=source_relative
