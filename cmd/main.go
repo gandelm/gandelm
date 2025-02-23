@@ -45,6 +45,8 @@ import (
 	gandelmcomv1 "github.com/gandelm/gandelm/api/v1"
 	"github.com/gandelm/gandelm/cmd/server"
 	"github.com/gandelm/gandelm/internal/container"
+	"github.com/gandelm/gandelm/internal/container/config"
+	"github.com/gandelm/gandelm/internal/container/github"
 	"github.com/gandelm/gandelm/internal/controller/gandelmcatalog"
 	// +kubebuilder:scaffold:imports
 )
@@ -248,7 +250,9 @@ func main() {
 	// 	panic(err)
 	// }
 
-	container := container.NewContainer(mgr.GetClient())
+	config := config.NewConfig()
+	github := github.NewGithub("https://github.com/gandelm/gandelm")
+	container := container.NewContainer(mgr.GetClient(), config, github)
 
 	ctx := context.Background()
 	eg, ctx := errgroup.WithContext(ctx)

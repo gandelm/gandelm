@@ -1,19 +1,19 @@
 package config
 
-type Config interface {
-	Namespace() string
-}
+import (
+	"github.com/gandelm/gandelm/internal/container"
+)
 
-type ConfigImpl struct {
+type Config struct {
 	namespace string
 }
 
-func (c *ConfigImpl) Namespace() string {
+func (c *Config) Namespace() string {
 	return c.namespace
 }
 
-func NewConfig() Config {
-	return &ConfigImpl{
+func NewConfig() container.Config {
+	return &Config{
 		namespace: "default",
 	}
 }

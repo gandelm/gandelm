@@ -1,0 +1,17 @@
+apiVersion: gandelm.com/v1
+kind: Gandelm
+metadata:
+  labels:
+    app.kubernetes.io/name: gandelm
+    app.kubernetes.io/managed-by: kustomize
+  name: gandelm-sample
+spec:
+  endpoint: https://example.com
+  entrypoint: https://example.com/entry
+  artifacts:
+    - id: core-api
+      version: abcdef00
+      url: https://gandelm-sample.core-api.dev.exsample.com
+    - id: admin
+      version: abcdef00
+      url: https://gandelm-sample.admin.dev.exsample.com
