@@ -14,7 +14,7 @@ type Containerer interface {
 
 type Github interface {
 	ListBranch(ctx context.Context) ([]string, error)
-	HookAction(ctx context.Context, target string)
+	HookAction(ctx context.Context, eventType string, input map[string]string) (any, error)
 }
 
 type Config interface {

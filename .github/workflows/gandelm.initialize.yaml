@@ -1,0 +1,12 @@
+on:
+  repository_dispatch:
+    types: [test]
+
+jobs:
+  test_job:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo '${{ toJson(github.event.action) }}'
+      - run: echo '${{ toJson(github.event.branch) }}'
+      - run: echo '${{ toJson(github.event.sender) }}'
+      - run: echo '${{ toJson(github.event.client_payload) }}'

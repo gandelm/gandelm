@@ -251,7 +251,12 @@ func main() {
 	// }
 
 	config := config.NewConfig()
-	github := github.NewGithub("https://github.com/gandelm/gandelm")
+	github, err := github.NewGithub("https://github.com/gandelm/gandelm")
+	if err != nil {
+		setupLog.Error(err, "unable to set up github client")
+		os.Exit(1)
+	}
+
 	container := container.NewContainer(mgr.GetClient(), config, github)
 
 	ctx := context.Background()
