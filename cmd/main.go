@@ -45,7 +45,7 @@ import (
 	gandelmcomv1 "github.com/gandelm/gandelm/api/v1"
 	"github.com/gandelm/gandelm/cmd/server"
 	"github.com/gandelm/gandelm/internal/container"
-	"github.com/gandelm/gandelm/internal/controller"
+	"github.com/gandelm/gandelm/internal/controller/gandelmcatalog"
 	// +kubebuilder:scaffold:imports
 )
 
@@ -209,7 +209,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	if err = (&controller.GandelmCatalogReconciler{
+	if err = (&gandelmcatalog.GandelmCatalogReconciler{
 		Client: mgr.GetClient(),
 		Scheme: mgr.GetScheme(),
 	}).SetupWithManager(mgr); err != nil {

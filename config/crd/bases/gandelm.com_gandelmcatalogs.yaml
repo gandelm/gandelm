@@ -67,22 +67,16 @@ spec:
           status:
             description: GandelmCatalogStatus defines the observed state of GandelmCatalog.
             properties:
-              initializing:
+              message:
+                type: string
+              phase:
                 description: |-
                   INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
                   Important: Run "make" to regenerate code after modifying this file
-                type: boolean
-              synced:
-                type: boolean
-              terminating:
-                type: boolean
-              updating:
-                type: boolean
-            required:
-            - initializing
-            - synced
-            - terminating
-            - updating
+                type: string
+              timestamp:
+                format: date-time
+                type: string
             type: object
         type: object
     served: true

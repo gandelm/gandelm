@@ -18,13 +18,15 @@ package controller
 
 import (
 	"context"
+	"time"
 
 	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/log"
 
-	gandelmcomv1 "github.com/gandelm/gandelm/api/v1"
+	v1 "github.com/gandelm/gandelm/api/v1"
+	apierrors "k8s.io/apimachinery/pkg/api/errors"
 )
 
 // GandelmReconciler reconciles a Gandelm object
@@ -47,9 +49,20 @@ type GandelmReconciler struct {
 // For more details, check Reconcile and its Result here:
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.20.0/pkg/reconcile
 func (r *GandelmReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
-	_ = log.FromContext(ctx)
+	logger := log.FromContext(ctx)
 
 	// TODO(user): your logic here
+	var gandelm v1.Gandelm
+	err := r.Get(ctx, req.NamespacedName, &gandelm)
+	if apierrors.IsNotFound(err) {
+		logger.Info("Gandelm deleted.")
+		return ctrl.Result{}, nil
+	} else if err != nil {
+		logger.Error(err, "unable to fetch Gandelm")
+		return ctrl.Result{
+			RequeueAfter: time.Duration(time.Minute),
+		}, err
+	}
 
 	return ctrl.Result{}, nil
 }
@@ -57,7 +70,7 @@ func (r *GandelmReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 // SetupWithManager sets up the controller with the Manager.
 func (r *GandelmReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
-		For(&gandelmcomv1.Gandelm{}).
+		For(&v1.Gandelm{}).
 		Named("gandelm").
 		Complete(r)
 }
