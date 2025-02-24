@@ -42,10 +42,11 @@ import (
 	metricsserver "sigs.k8s.io/controller-runtime/pkg/metrics/server"
 	"sigs.k8s.io/controller-runtime/pkg/webhook"
 
+	env "github.com/caarlos0/env/v11"
 	gandelmcomv1 "github.com/gandelm/gandelm/api/v1"
 	"github.com/gandelm/gandelm/cmd/server"
+	"github.com/gandelm/gandelm/config"
 	"github.com/gandelm/gandelm/internal/container"
-	"github.com/gandelm/gandelm/internal/container/config"
 	"github.com/gandelm/gandelm/internal/container/github"
 	"github.com/gandelm/gandelm/internal/controller/gandelmcatalog"
 	// +kubebuilder:scaffold:imports
@@ -245,19 +246,18 @@ func main() {
 		os.Exit(1)
 	}
 
-	// _, err = config.NewConfigFromFlags()
-	// if err != nil {
-	// 	panic(err)
-	// }
+	var envs config.Env
+	if err = env.Parse(&envs); err != nil {
+		os.Exit(1)
+	}
 
-	config := config.NewConfig()
-	github, err := github.NewGithub("https://github.com/gandelm/gandelm")
+	github, err := github.NewGithub(envs.Github.URL)
 	if err != nil {
 		setupLog.Error(err, "unable to set up github client")
 		os.Exit(1)
 	}
 
-	container := container.NewContainer(mgr.GetClient(), config, github)
+	container := container.NewContainer(mgr.GetClient(), envs.BuildConfig(), github)
 
 	ctx := context.Background()
 	eg, ctx := errgroup.WithContext(ctx)
