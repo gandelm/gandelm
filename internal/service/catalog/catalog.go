@@ -32,8 +32,9 @@ func (c *CatalogService) Create(ctx context.Context, request *connect.Request[ca
 
 	catalog := v1.GandelmCatalog{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      id,
-			Namespace: c.container.Config().Namespace(),
+			Name:       id,
+			Namespace:  c.container.Config().Namespace(),
+			Finalizers: []string{"gandelm.com/finalizer"},
 		},
 	}
 

@@ -5,19 +5,19 @@ import (
 	"fmt"
 	"time"
 
+	gandelmcomv1 "github.com/gandelm/gandelm/api/v1"
+	v1 "github.com/gandelm/gandelm/api/v1"
+	"github.com/gandelm/gandelm/internal/container"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
-	"k8s.io/apimachinery/pkg/types"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/predicate"
-
-	gandelmcomv1 "github.com/gandelm/gandelm/api/v1"
-	v1 "github.com/gandelm/gandelm/api/v1"
-	"github.com/gandelm/gandelm/internal/container"
 )
+
+var finalizer = "gandelm.com/finalizer"
 
 // GandelmCatalogReconciler reconciles a GandelmCatalog object
 type GandelmCatalogReconciler struct {
@@ -33,14 +33,16 @@ func (r *GandelmCatalogReconciler) Reconcile(ctx context.Context, req ctrl.Reque
 	logger := log.FromContext(ctx)
 
 	var catalog v1.GandelmCatalog
-	err := r.Get(ctx, req.NamespacedName, &catalog)
-	if apierrors.IsNotFound(err) {
-		return r.Delete(ctx, req.NamespacedName)
-	} else if err != nil {
+	if err := r.Get(ctx, req.NamespacedName, &catalog); err != nil {
+		if apierrors.IsNotFound(err) {
+			return ctrl.Result{}, nil
+		}
 		logger.Error(err, "unable to fetch GandelmCatalog")
-		return ctrl.Result{
-			RequeueAfter: time.Duration(time.Minute),
-		}, err
+		return ctrl.Result{RequeueAfter: time.Duration(30 * time.Second)}, err
+	}
+
+	if !catalog.DeletionTimestamp.IsZero() {
+		return r.Delete(ctx, catalog)
 	}
 
 	if catalog.Status.Phase == NONE {
@@ -60,29 +62,17 @@ func (r *GandelmCatalogReconciler) SetupWithManager(mgr ctrl.Manager) error {
 }
 
 func (r *GandelmCatalogReconciler) Create(ctx context.Context, catalog v1.GandelmCatalog) (ctrl.Result, error) {
-	logger := log.FromContext(ctx)
-	logger.Info(fmt.Sprintf("新しい GandelmCatalog を検知しました(%s)", catalog.Name))
-	logger.Info("Github Actions をフックします")
-
-	// ここでフックする
-	// if _, err := r.Container.Github().HookAction(ctx, "test", map[string]string{
-	// 	"name": catalog.Name,
-	// 	"type": "update",
-	// }); err != nil {
-	// 	return ctrl.Result{
-	// 		RequeueAfter: time.Duration(time.Minute),
-	// 	}, err
-	// }
+	if err := r.Container.Command().HelmInstall(catalog.Name, "./repositories/gandelm/manifests/nginx"); err != nil {
+		return ctrl.Result{RequeueAfter: time.Duration(time.Minute)}, nil
+	}
 
 	// フック結果でステータスを更新
 	catalog.Status.Phase = INITIALIZED
 	catalog.Status.Message = "初期化スクリプトをフックしました"
 	catalog.Status.Timestamp = metav1.Time{Time: time.Now()}
+
 	if err := r.Status().Update(ctx, &catalog); err != nil {
-		logger.Error(err, "unable to update GandelmCatalog status")
-		return ctrl.Result{
-			RequeueAfter: time.Duration(time.Minute),
-		}, err
+		return ctrl.Result{}, err
 	}
 
 	return ctrl.Result{}, nil
@@ -119,15 +109,25 @@ func (r *GandelmCatalogReconciler) Update(ctx context.Context, catalog v1.Gandel
 	return ctrl.Result{}, nil
 }
 
-func (r *GandelmCatalogReconciler) Delete(ctx context.Context, req types.NamespacedName) (ctrl.Result, error) {
-	// if _, err := r.Container.Github().HookAction(ctx, "test", map[string]string{
-	// 	"name": catalog.Name,
-	// 	"type": "delete",
-	// }); err != nil {
-	// 	return ctrl.Result{
-	// 		RequeueAfter: time.Duration(time.Minute),
-	// 	}, err
-	// }
+func (r *GandelmCatalogReconciler) Delete(ctx context.Context, catalog v1.GandelmCatalog) (ctrl.Result, error) {
+	if len(catalog.Finalizers) == 0 {
+		return ctrl.Result{}, nil
+	}
+
+	for _, f := range catalog.Finalizers {
+		if f != finalizer {
+			continue
+		}
+
+		if err := r.Container.Command().HelmUnInstall(catalog.Name); err != nil {
+			return ctrl.Result{RequeueAfter: time.Duration(time.Minute)}, err
+		}
+	}
+
+	catalog.Finalizers = []string{}
+	if err := r.Client.Update(ctx, &catalog); err != nil {
+		return ctrl.Result{RequeueAfter: time.Duration(time.Minute)}, err
+	}
 
 	return ctrl.Result{}, nil
 }
