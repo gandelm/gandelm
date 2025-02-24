@@ -42,9 +42,10 @@ type GandelmCatalogSpec struct {
 type GandelmCatalogStatus struct {
 	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
-	Phase     string      `json:"phase,omitempty"`
-	Message   string      `json:"message,omitempty"`
-	Timestamp metav1.Time `json:"timestamp,omitempty"`
+	Phase              string      `json:"phase,omitempty"`
+	Message            string      `json:"message,omitempty"`
+	ObservedGeneration int64       `json:"observedGeneration,omitempty"`
+	Timestamp          metav1.Time `json:"timestamp,omitempty"`
 }
 
 // +kubebuilder:object:root=true

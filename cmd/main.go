@@ -212,9 +212,23 @@ func main() {
 		os.Exit(1)
 	}
 
+	var envs config.Env
+	if err := env.Parse(&envs); err != nil {
+		os.Exit(1)
+	}
+
+	github, err := github.NewGithub(envs.Github.URL)
+	if err != nil {
+		setupLog.Error(err, "unable to set up github client")
+		os.Exit(1)
+	}
+
+	container := container.NewContainer(mgr.GetClient(), envs.BuildConfig(), github)
+
 	if err = (&gandelmcatalog.GandelmCatalogReconciler{
-		Client: mgr.GetClient(),
-		Scheme: mgr.GetScheme(),
+		Client:    mgr.GetClient(),
+		Scheme:    mgr.GetScheme(),
+		Container: container,
 	}).SetupWithManager(mgr); err != nil {
 		setupLog.Error(err, "unable to create controller", "controller", "GandelmCatalog")
 		os.Exit(1)
@@ -245,19 +259,6 @@ func main() {
 		setupLog.Error(err, "unable to set up ready check")
 		os.Exit(1)
 	}
-
-	var envs config.Env
-	if err = env.Parse(&envs); err != nil {
-		os.Exit(1)
-	}
-
-	github, err := github.NewGithub(envs.Github.URL)
-	if err != nil {
-		setupLog.Error(err, "unable to set up github client")
-		os.Exit(1)
-	}
-
-	container := container.NewContainer(mgr.GetClient(), envs.BuildConfig(), github)
 
 	ctx := context.Background()
 	eg, ctx := errgroup.WithContext(ctx)

@@ -16,12 +16,14 @@ import (
 
 	gandelmcomv1 "github.com/gandelm/gandelm/api/v1"
 	v1 "github.com/gandelm/gandelm/api/v1"
+	"github.com/gandelm/gandelm/internal/container"
 )
 
 // GandelmCatalogReconciler reconciles a GandelmCatalog object
 type GandelmCatalogReconciler struct {
 	client.Client
-	Scheme *runtime.Scheme
+	Scheme    *runtime.Scheme
+	Container container.Containerer
 }
 
 // +kubebuilder:rbac:groups=gandelm.com,resources=gandelmcatalogs,verbs=get;list;watch;create;update;patch;delete
@@ -63,6 +65,14 @@ func (r *GandelmCatalogReconciler) Create(ctx context.Context, catalog v1.Gandel
 	logger.Info("Github Actions をフックします")
 
 	// ここでフックする
+	// if _, err := r.Container.Github().HookAction(ctx, "test", map[string]string{
+	// 	"name": catalog.Name,
+	// 	"type": "update",
+	// }); err != nil {
+	// 	return ctrl.Result{
+	// 		RequeueAfter: time.Duration(time.Minute),
+	// 	}, err
+	// }
 
 	// フック結果でステータスを更新
 	catalog.Status.Phase = INITIALIZED
@@ -80,11 +90,25 @@ func (r *GandelmCatalogReconciler) Create(ctx context.Context, catalog v1.Gandel
 
 func (r *GandelmCatalogReconciler) Update(ctx context.Context, catalog v1.GandelmCatalog) (ctrl.Result, error) {
 	logger := log.FromContext(ctx)
+
+	if catalog.ObjectMeta.Generation == catalog.Status.ObservedGeneration {
+		logger.Info(fmt.Sprintf("Synced: %s", catalog.Name))
+		return ctrl.Result{}, nil
+	}
+
+	// if _, err := r.Container.Github().HookAction(ctx, "test", map[string]string{
+	// 	"name": catalog.Name,
+	// 	"type": "update",
+	// }); err != nil {
+	// 	return ctrl.Result{
+	// 		RequeueAfter: time.Duration(time.Minute),
+	// 	}, err
+	// }
+
 	catalog.Status.Phase = UPDATED
 	catalog.Status.Message = "更新スクリプトをフックしました"
+	catalog.Status.ObservedGeneration = catalog.ObjectMeta.Generation
 	catalog.Status.Timestamp = metav1.Time{Time: time.Now()}
-
-	logger.Info(fmt.Sprintf("GandelmCatalog を更新します(%s)", catalog.Name))
 	if err := r.Status().Update(ctx, &catalog); err != nil {
 		logger.Error(err, "unable to update GandelmCatalog status")
 		return ctrl.Result{
@@ -96,8 +120,14 @@ func (r *GandelmCatalogReconciler) Update(ctx context.Context, catalog v1.Gandel
 }
 
 func (r *GandelmCatalogReconciler) Delete(ctx context.Context, req types.NamespacedName) (ctrl.Result, error) {
-	logger := log.FromContext(ctx)
-	logger.Info(fmt.Sprintf("GandelmCatalog が削除されました(%s)", req.Name))
-	logger.Info("Github Actins をフックします")
+	// if _, err := r.Container.Github().HookAction(ctx, "test", map[string]string{
+	// 	"name": catalog.Name,
+	// 	"type": "delete",
+	// }); err != nil {
+	// 	return ctrl.Result{
+	// 		RequeueAfter: time.Duration(time.Minute),
+	// 	}, err
+	// }
+
 	return ctrl.Result{}, nil
 }

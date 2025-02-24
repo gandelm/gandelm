@@ -69,6 +69,9 @@ spec:
             properties:
               message:
                 type: string
+              observedGeneration:
+                format: int64
+                type: integer
               phase:
                 description: |-
                   INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
