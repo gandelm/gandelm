@@ -25,6 +25,7 @@ type Config interface {
 
 type Commander interface {
 	HelmInstall(releaseName, path string) error
+	HelmUpgrade(releaseName, path string) error
 	HelmUnInstall(releaseName string) error
 	GitClone(org, repo string) error
 }

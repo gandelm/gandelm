@@ -30,6 +30,17 @@ func (c *Command) HelmInstall(releaseName, path string) error {
 	)
 }
 
+func (c *Command) HelmUpgrade(releaseName, path string) error {
+	return c.run(
+		"helm",
+		"upgrade",
+		"app",
+		path,
+		"--namespace",
+		releaseName,
+	)
+}
+
 func (c *Command) HelmUnInstall(releaseName string) error {
 	return c.run(
 		"helm",
