@@ -1,6 +1,10 @@
 package entity
 
-import "github.com/google/uuid"
+import (
+	"time"
+
+	"github.com/google/uuid"
+)
 
 type Catalogs []*Catalog
 type Catalog struct {
@@ -12,4 +16,7 @@ type Catalog struct {
 	WorkloadID  WorkloadID
 
 	Artifacts ArtifactTag
+
+	CreatedAt time.Time
+	UpdatedAt time.Time
 }

@@ -5,6 +5,7 @@ import (
 	catalogv1 "github.com/gandelm/gandelm/generated/protocol/catalog/v1"
 	"github.com/gandelm/gandelm/internal/core/domain/entity"
 	"github.com/google/uuid"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 func MakeCatalogPb(catalog *entity.Catalog) *catalogv1.Catalog {
@@ -14,6 +15,8 @@ func MakeCatalogPb(catalog *entity.Catalog) *catalogv1.Catalog {
 		Version:     catalog.Version,
 		Description: catalog.Description,
 		Priority:    uint32(catalog.Priority),
+		CreatedAt:   timestamppb.New(catalog.CreatedAt),
+		UpdatedAt:   timestamppb.New(catalog.UpdatedAt),
 	}
 }
 
@@ -28,11 +31,13 @@ func MakeCatalogsPb(catalogs entity.Catalogs) []*catalogv1.Catalog {
 
 func MakeCatalog(catalog *v1.GandelmCatalog) *entity.Catalog {
 	return &entity.Catalog{
-		ID:          uuid.MustParse(catalog.Spec.ID),
+		ID:          uuid.MustParse(catalog.Name),
 		Name:        catalog.Spec.Name,
 		Version:     catalog.Spec.Version,
 		Description: catalog.Spec.Description,
 		Priority:    int(catalog.Spec.Priority),
+		CreatedAt:   catalog.Spec.CreatedAt.Time,
+		UpdatedAt:   catalog.Spec.UpdatedAt.Time,
 	}
 }
 

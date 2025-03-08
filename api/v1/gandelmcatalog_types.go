@@ -35,7 +35,10 @@ type GandelmCatalogSpec struct {
 
 	Description  string            `json:"description,omitempty"`
 	Labels       []string          `json:"labels,omitempty"`
-	ArtifactTags map[string]string `json:"artifactTags,omitempty"`
+	ArtifactTags map[string]string `json:"artifact_tags,omitempty"`
+
+	CreatedAt metav1.Time `json:"created_at"`
+	UpdatedAt metav1.Time `json:"updated_at"`
 }
 
 // GandelmCatalogStatus defines the observed state of GandelmCatalog.

@@ -2,6 +2,8 @@ package etcd
 
 import (
 	"context"
+	"sort"
+	"time"
 
 	v1 "github.com/gandelm/gandelm/api/v1"
 	"github.com/gandelm/gandelm/internal/container"
@@ -50,25 +52,19 @@ func (c *CatalogRepository) Create(ctx context.Context, catalog *entity.Catalog)
 		},
 	}
 
+	now := time.Now()
+
 	model.Spec = v1.GandelmCatalogSpec{
 		ID:          catalog.WorkloadID,
 		Name:        catalog.Name,
 		Version:     catalog.Version,
 		Description: catalog.Description,
 		Priority:    uint32(catalog.Priority),
+		CreatedAt:   metav1.Time{Time: now},
+		UpdatedAt:   metav1.Time{Time: now},
 	}
 
 	return c.db.Create(ctx, &model)
-}
-
-// Delete implements repository.CatalogRWRepository.
-func (c *CatalogRepository) Delete(ctx context.Context, id uuid.UUID) error {
-	return c.db.Delete(ctx, &v1.GandelmCatalog{
-		ObjectMeta: metav1.ObjectMeta{
-			Name:      id.String(),
-			Namespace: c.container.Config().Namespace(),
-		},
-	})
 }
 
 // Update implements repository.CatalogRWRepository.
@@ -80,15 +76,28 @@ func (c *CatalogRepository) Update(ctx context.Context, catalog *entity.Catalog)
 		},
 	}
 
+	now := time.Now()
+
 	model.Spec = v1.GandelmCatalogSpec{
 		ID:          catalog.WorkloadID,
 		Name:        catalog.Name,
 		Version:     catalog.Version,
 		Description: catalog.Description,
 		Priority:    uint32(catalog.Priority),
+		UpdatedAt:   metav1.Time{Time: now},
 	}
 
 	return c.db.Update(ctx, &model)
+}
+
+// Delete implements repository.CatalogRWRepository.
+func (c *CatalogRepository) Delete(ctx context.Context, id uuid.UUID) error {
+	return c.db.Delete(ctx, &v1.GandelmCatalog{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:      id.String(),
+			Namespace: c.container.Config().Namespace(),
+		},
+	})
 }
 
 // Find implements repository.CatalogRORepository.
@@ -110,6 +119,10 @@ func (c *CatalogRORepository) FindAll(ctx context.Context) (entity.Catalogs, err
 	if err := c.db.List(ctx, &catalogs); err != nil {
 		return nil, err
 	}
+
+	sort.SliceStable(catalogs.Items, func(i, j int) bool {
+		return catalogs.Items[i].Spec.Priority > catalogs.Items[j].Spec.Priority
+	})
 
 	return converter.MakeCatalogs(catalogs), nil
 }
