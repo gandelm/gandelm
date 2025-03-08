@@ -14,18 +14,29 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
-var _ repository.CatalogRORepository = (*CatalogRepository)(nil)
-var _ repository.CatalogRWRepository = (*CatalogRepository)(nil)
+var _ repository.CatalogRORepository = (*CatalogRORepository)(nil)
 
-type CatalogRepository struct {
+type CatalogRORepository struct {
 	db        client.Client
 	container container.Containerer
 }
 
-func NewCatalogRepository(container container.Containerer) *CatalogRepository {
-	return &CatalogRepository{
+func NewCatalogRORepository(container container.Containerer) *CatalogRORepository {
+	return &CatalogRORepository{
 		container: container,
 		db:        container.Kubernetes(),
+	}
+}
+
+var _ repository.CatalogRWRepository = (*CatalogRepository)(nil)
+
+type CatalogRepository struct {
+	*CatalogRORepository
+}
+
+func NewCatalogRepository(container container.Containerer) *CatalogRepository {
+	return &CatalogRepository{
+		CatalogRORepository: NewCatalogRORepository(container),
 	}
 }
 
@@ -81,7 +92,7 @@ func (c *CatalogRepository) Update(ctx context.Context, catalog *entity.Catalog)
 }
 
 // Find implements repository.CatalogRORepository.
-func (c *CatalogRepository) Find(ctx context.Context, id uuid.UUID) (*entity.Catalog, error) {
+func (c *CatalogRORepository) Find(ctx context.Context, id uuid.UUID) (*entity.Catalog, error) {
 	catalog := &v1.GandelmCatalog{}
 	if err := c.db.Get(ctx, types.NamespacedName{
 		Namespace: c.container.Config().Namespace(),
@@ -94,7 +105,7 @@ func (c *CatalogRepository) Find(ctx context.Context, id uuid.UUID) (*entity.Cat
 }
 
 // FindAll implements repository.CatalogRORepository.
-func (c *CatalogRepository) FindAll(ctx context.Context) (entity.Catalogs, error) {
+func (c *CatalogRORepository) FindAll(ctx context.Context) (entity.Catalogs, error) {
 	catalogs := v1.GandelmCatalogList{}
 	if err := c.db.List(ctx, &catalogs); err != nil {
 		return nil, err

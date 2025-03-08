@@ -1,4 +1,4 @@
-package github_webhook_handler
+package github_webhook
 
 import (
 	"crypto/hmac"

@@ -7,8 +7,8 @@ import (
 	catalogv1 "github.com/gandelm/gandelm/generated/protocol/catalog/v1"
 	"github.com/gandelm/gandelm/internal/container"
 	"github.com/gandelm/gandelm/internal/converter"
-	"github.com/gandelm/gandelm/internal/core/infrastructure/etcd"
 	"github.com/gandelm/gandelm/internal/core/usecase"
+	"github.com/gandelm/gandelm/internal/provider"
 	"github.com/google/uuid"
 )
 
@@ -27,13 +27,12 @@ func (c *CatalogService) Create(ctx context.Context, request *connect.Request[ca
 	version := request.Msg.GetVersion()
 	name := request.Msg.GetName()
 
-	o, err := usecase.NewCatalogCreate(etcd.NewCatalogRepository(c.container)).
-		Execute(ctx, &usecase.CatalogCreateInput{
-			Priority:    int(priority),
-			Description: description,
-			Version:     version,
-			Name:        name,
-		})
+	o, err := provider.NewCatalogCreator(c.container).Execute(ctx, &usecase.CatalogCreateInput{
+		Priority:    int(priority),
+		Description: description,
+		Version:     version,
+		Name:        name,
+	})
 	if err != nil {
 		return nil, err
 	}
@@ -51,7 +50,7 @@ func (c *CatalogService) Delete(ctx context.Context, request *connect.Request[ca
 		return nil, err
 	}
 
-	if err := etcd.NewCatalogRepository(c.container).Delete(ctx, uuid); err != nil {
+	if err := provider.NewCatalogRWRepository(c.container).Delete(ctx, uuid); err != nil {
 		return nil, err
 	}
 
@@ -66,7 +65,7 @@ func (c *CatalogService) Get(ctx context.Context, request *connect.Request[catal
 		return nil, err
 	}
 
-	catalog, err := etcd.NewCatalogRepository(c.container).Find(ctx, uuid)
+	catalog, err := provider.NewCatalogRORepository(c.container).Find(ctx, uuid)
 	if err != nil {
 		return nil, err
 	}
@@ -78,7 +77,7 @@ func (c *CatalogService) Get(ctx context.Context, request *connect.Request[catal
 
 // List implements catalogv1connect.CatalogServiceHandler.
 func (c *CatalogService) List(ctx context.Context, request *connect.Request[catalogv1.ListRequest]) (*connect.Response[catalogv1.ListResponse], error) {
-	catalogs, err := etcd.NewCatalogRepository(c.container).FindAll(ctx)
+	catalogs, err := provider.NewCatalogRORepository(c.container).FindAll(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -96,14 +95,13 @@ func (c *CatalogService) Update(ctx context.Context, request *connect.Request[ca
 		return nil, err
 	}
 
-	o, err := usecase.NewCatalogUpdate(etcd.NewCatalogRepository(c.container)).
-		Execute(ctx, &usecase.CatalogUpdateInput{
-			ID:          uuid,
-			Priority:    int(catalogpb.GetPriority()),
-			Description: catalogpb.GetDescription(),
-			Version:     catalogpb.GetVersion(),
-			Name:        catalogpb.GetName(),
-		})
+	o, err := provider.NewCatalogUpdator(c.container).Execute(ctx, &usecase.CatalogUpdateInput{
+		ID:          uuid,
+		Priority:    int(catalogpb.GetPriority()),
+		Description: catalogpb.GetDescription(),
+		Version:     catalogpb.GetVersion(),
+		Name:        catalogpb.GetName(),
+	})
 	if err != nil {
 		return nil, err
 	}

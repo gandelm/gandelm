@@ -46,9 +46,9 @@ import (
 	gandelmcomv1 "github.com/gandelm/gandelm/api/v1"
 	"github.com/gandelm/gandelm/cmd/server"
 	"github.com/gandelm/gandelm/config"
+	"github.com/gandelm/gandelm/internal/adapter/k8s/controller/gandelmcatalog"
 	"github.com/gandelm/gandelm/internal/container"
 	"github.com/gandelm/gandelm/internal/container/github"
-	"github.com/gandelm/gandelm/internal/controller/gandelmcatalog"
 	// +kubebuilder:scaffold:imports
 )
 
