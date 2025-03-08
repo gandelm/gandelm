@@ -8,6 +8,8 @@ import (
 	v1 "github.com/gandelm/gandelm/api/v1"
 	catalogv1 "github.com/gandelm/gandelm/generated/protocol/catalog/v1"
 	"github.com/gandelm/gandelm/internal/container"
+	"github.com/gandelm/gandelm/internal/core/infrastructure/etcd"
+	"github.com/gandelm/gandelm/internal/core/usecase"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
 )
@@ -27,37 +29,24 @@ func (c *CatalogService) Create(ctx context.Context, request *connect.Request[ca
 	version := request.Msg.GetVersion()
 	name := request.Msg.GetName()
 
-	id := strings.ReplaceAll(version, ".", "-") + "-" + name
-	id = strings.ToLower(id)
-
-	catalog := v1.GandelmCatalog{
-		ObjectMeta: metav1.ObjectMeta{
-			Name:       id,
-			Namespace:  c.container.Config().Namespace(),
-			Finalizers: []string{"gandelm.com/finalizer"},
-		},
-	}
-
-	spec := v1.GandelmCatalogSpec{
-		ID:          id,
-		Name:        name,
-		Version:     version,
-		Description: description,
-		Priority:    priority,
-	}
-	catalog.Spec = spec
-
-	if err := c.container.Kubernetes().Create(ctx, &catalog); err != nil {
+	o, err := usecase.NewCatalogCreate(etcd.NewCatalogRepository(c.container)).
+		Execute(ctx, &usecase.CatalogCreateInput{
+			Priority:    int(priority),
+			Description: description,
+			Version:     version,
+			Name:        name,
+		})
+	if err != nil {
 		return nil, err
 	}
 
 	return connect.NewResponse(&catalogv1.CreateResponse{
 		Catalog: &catalogv1.Catalog{
-			Id:          id,
-			Name:        name,
-			Version:     version,
-			Description: description,
-			Priority:    priority,
+			Id:          o.Catalog.ID.String(),
+			Name:        o.Catalog.Name,
+			Version:     o.Catalog.Version,
+			Description: o.Catalog.Description,
+			Priority:    uint32(o.Catalog.Priority),
 		},
 	}), nil
 }
