@@ -3,8 +3,6 @@ package github
 import (
 	"context"
 	"encoding/json"
-	"fmt"
-	"strings"
 
 	"github.com/gandelm/gandelm/internal/container"
 	"github.com/google/go-github/v69/github"
@@ -72,10 +70,6 @@ func (c *Github) ListBranch(ctx context.Context) ([]string, error) {
 	return result, nil
 }
 
-func NewGithub(url string) (*Github, error) {
-	parts := strings.Split(strings.TrimPrefix(url, "https://github.com/"), "/")
-	if len(parts) != 2 && len(parts) != 3 {
-		return nil, fmt.Errorf("invalid GitHub URL")
-	}
-	return &Github{githubOrg: parts[0], githubRepo: parts[1]}, nil
+func NewGithub(org, repo string) *Github {
+	return &Github{githubOrg: org, githubRepo: repo}
 }

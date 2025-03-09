@@ -3,7 +3,6 @@ package container
 import (
 	"context"
 
-	"github.com/gandelm/gandelm/internal/container/command"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
@@ -24,9 +23,9 @@ type Config interface {
 }
 
 type Commander interface {
-	HelmInstall(releaseName, path string) error
-	HelmUpgrade(releaseName, path string) error
-	HelmUnInstall(releaseName string) error
+	HelmInstall(namespace, releaseName string) error
+	HelmUpgrade(namespace, releaseName string) error
+	HelmUnInstall(namespace, releaseName string) error
 	GitClone(org, repo string) error
 }
 
@@ -53,11 +52,16 @@ func (c *Container) Command() Commander {
 	return c.commander
 }
 
-func NewContainer(kubernetes client.Client, config Config, github Github) Containerer {
+func NewContainer(
+	kubernetes client.Client,
+	config Config,
+	github Github,
+	command Commander,
+) Containerer {
 	return &Container{
 		kubernetes: kubernetes,
 		config:     config,
 		github:     github,
-		commander:  &command.Command{},
+		commander:  command,
 	}
 }

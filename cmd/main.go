@@ -48,7 +48,6 @@ import (
 	"github.com/gandelm/gandelm/config"
 	"github.com/gandelm/gandelm/internal/adapter/k8s/controller/gandelmcatalog"
 	"github.com/gandelm/gandelm/internal/container"
-	"github.com/gandelm/gandelm/internal/container/github"
 	// +kubebuilder:scaffold:imports
 )
 
@@ -217,13 +216,12 @@ func main() {
 		os.Exit(1)
 	}
 
-	github, err := github.NewGithub(envs.Github.URL)
-	if err != nil {
-		setupLog.Error(err, "unable to set up github client")
-		os.Exit(1)
-	}
-
-	container := container.NewContainer(mgr.GetClient(), envs.BuildConfig(), github)
+	container := container.NewContainer(
+		mgr.GetClient(),
+		envs.BuildConfig(),
+		envs.BuildGithub(),
+		envs.BuildCommander(),
+	)
 
 	if err = (&gandelmcatalog.GandelmCatalogReconciler{
 		Client:    mgr.GetClient(),

@@ -5,12 +5,15 @@ import (
 
 	"connectrpc.com/connect"
 	catalogv1 "github.com/gandelm/gandelm/generated/protocol/catalog/v1"
+	"github.com/gandelm/gandelm/generated/protocol/catalog/v1/catalogv1connect"
 	"github.com/gandelm/gandelm/internal/container"
 	"github.com/gandelm/gandelm/internal/converter"
 	"github.com/gandelm/gandelm/internal/core/usecase"
 	"github.com/gandelm/gandelm/internal/provider"
 	"github.com/google/uuid"
 )
+
+var _ catalogv1connect.CatalogServiceHandler = (*CatalogService)(nil)
 
 func NewCatalogService(container container.Containerer) *CatalogService {
 	return &CatalogService{container: container}

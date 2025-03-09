@@ -57,7 +57,7 @@ func (r *GandelmCatalogReconciler) SetupWithManager(mgr ctrl.Manager) error {
 }
 
 func (r *GandelmCatalogReconciler) Create(ctx context.Context, catalog v1.GandelmCatalog) (ctrl.Result, error) {
-	if err := r.Container.Command().HelmInstall(catalog.Name, "./repositories/gandelm/manifests/nginx"); err != nil {
+	if err := r.Container.Command().HelmInstall(catalog.Spec.Name, catalog.Spec.Name); err != nil {
 		return ctrl.Result{RequeueAfter: time.Duration(time.Minute)}, nil
 	}
 
@@ -76,7 +76,7 @@ func (r *GandelmCatalogReconciler) Update(ctx context.Context, catalog v1.Gandel
 		return ctrl.Result{}, nil
 	}
 
-	if err := r.Container.Command().HelmUpgrade(catalog.Name, "./repositories/gandelm/manifests/nginx"); err != nil {
+	if err := r.Container.Command().HelmUpgrade(catalog.Spec.Name, catalog.Spec.Name); err != nil {
 		return ctrl.Result{RequeueAfter: time.Duration(time.Minute)}, nil
 	}
 
@@ -100,7 +100,7 @@ func (r *GandelmCatalogReconciler) Delete(ctx context.Context, catalog v1.Gandel
 			continue
 		}
 
-		if err := r.Container.Command().HelmUnInstall(catalog.Name); err != nil {
+		if err := r.Container.Command().HelmUnInstall(catalog.Spec.Name, catalog.Spec.Name); err != nil {
 			return ctrl.Result{RequeueAfter: time.Duration(time.Minute)}, nil
 		}
 	}

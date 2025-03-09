@@ -12,7 +12,7 @@ spec:
   artifacts:
     - id: core-api
       version: abcdef00
-      url: https://gandelm-sample.core-api.dev.exsample.com
+      url: https://gandelm-sample.core-api.dev.example.com
     - id: admin
       version: abcdef00
-      url: https://gandelm-sample.admin.dev.exsample.com
+      url: https://gandelm-sample.admin.dev.example.com
