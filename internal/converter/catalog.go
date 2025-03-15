@@ -11,6 +11,7 @@ import (
 func MakeCatalogPb(catalog *entity.Catalog) *catalogv1.Catalog {
 	return &catalogv1.Catalog{
 		Id:          catalog.ID.String(),
+		WorkloadId:  catalog.WorkloadID,
 		Name:        catalog.Name,
 		Version:     catalog.Version,
 		Description: catalog.Description,
@@ -32,6 +33,7 @@ func MakeCatalogsPb(catalogs entity.Catalogs) []*catalogv1.Catalog {
 func MakeCatalog(catalog *v1.GandelmCatalog) *entity.Catalog {
 	return &entity.Catalog{
 		ID:          uuid.MustParse(catalog.Name),
+		WorkloadID:  catalog.Spec.ID,
 		Name:        catalog.Spec.Name,
 		Version:     catalog.Spec.Version,
 		Description: catalog.Spec.Description,

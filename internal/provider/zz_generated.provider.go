@@ -26,3 +26,7 @@ func NewCatalogRORepository(container container.Containerer) repository.CatalogR
 func NewCatalogRWRepository(container container.Containerer) repository.CatalogRWRepository {
 	return etcd.NewCatalogRepository(container)
 }
+
+func NewWorkloadRORepository(container container.Containerer) repository.WorkloadRORepository {
+	return etcd.NewWorkloadRORepository(container)
+}

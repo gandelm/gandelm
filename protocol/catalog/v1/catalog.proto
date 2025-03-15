@@ -36,12 +36,13 @@ message DeleteResponse {}
 
 message Catalog {
   string id = 1;
-  string name = 2;
-  string description = 3;
-  string version = 4;
-  uint32 priority = 5;
-  google.protobuf.Timestamp created_at = 6;
-  google.protobuf.Timestamp updated_at = 7;
+  string workload_id = 2;
+  string name = 3;
+  string description = 4;
+  string version = 5;
+  uint32 priority = 6;
+  google.protobuf.Timestamp created_at = 7;
+  google.protobuf.Timestamp updated_at = 8;
 }
 
 message Artifact {

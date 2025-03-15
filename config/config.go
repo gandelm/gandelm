@@ -21,7 +21,7 @@ type Env struct {
 
 	Helm struct {
 		ManifestPath string `env:"HELM_MANIFEST_PATH" envDefault:"./manifests"`
-		PackageName  string `env:"HELM_PACKAGE_NAME" envDefault:""`
+		PackageName  string `env:"HELM_PACKAGE_NAME" envDefault:"nginx"`
 	}
 }
 

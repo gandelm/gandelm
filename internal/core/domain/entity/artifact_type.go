@@ -1,8 +1,9 @@
 package entity
 
-type ArtifactType = string
+type ArtifactType = int32
 
 const (
-	ArtifactTypeContainer ArtifactType = "CONTAINER"
-	ArtifactTypeAsset     ArtifactType = "ASSET"
+	ArtifactTypeNone      ArtifactType = iota
+	ArtifactTypeContainer ArtifactType = iota
+	ArtifactTypeAsset     ArtifactType = iota
 )
