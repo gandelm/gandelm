@@ -7,6 +7,10 @@ import (
 	"github.com/gandelm/gandelm/internal/core/usecase"
 )
 
+func NewDeploymentRORepository(container container.Containerer) repository.DeploymentRORepository {
+	return etcd.NewDeploymentRORepository(container)
+}
+
 func NewCatalogCreator(container container.Containerer) usecase.CatalogCreator {
 	return usecase.NewCatalogCreate(
 		NewCatalogRWRepository(container),

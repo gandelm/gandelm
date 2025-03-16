@@ -1,12 +1,12 @@
 apiVersion: gandelm.com/v1
 kind: Gandelm
 metadata:
-  name: gandelm-sample
+  name: {{ .Release.Name }}
 spec:
   endpoint: https://example.com
   entrypoint: https://example.com/entry
   external_links:
     - title: 'core-api'
-      url: https://gandelm-sample.core-api.dev.example.com
+      url: https://{{ .Release.Namespace }}.core-api.dev.example.com
     - title: '管理ツール'
-      url: https://gandelm-sample.admin.dev.example.com
+      url: https://{{ .Release.Namespace }}.admin.dev.example.com

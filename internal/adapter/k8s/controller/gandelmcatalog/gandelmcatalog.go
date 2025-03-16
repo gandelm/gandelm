@@ -63,6 +63,7 @@ func (r *GandelmCatalogReconciler) Create(ctx context.Context, catalog v1.Gandel
 
 	catalog.Status.Phase = INITIALIZED
 	catalog.Status.Timestamp = metav1.Time{Time: time.Now()}
+	catalog.Status.ObservedGeneration = catalog.ObjectMeta.Generation
 
 	if err := r.Status().Update(ctx, &catalog); err != nil {
 		return ctrl.Result{}, err

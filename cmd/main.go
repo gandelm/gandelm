@@ -46,6 +46,7 @@ import (
 	gandelmcomv1 "github.com/gandelm/gandelm/api/v1"
 	"github.com/gandelm/gandelm/cmd/server"
 	"github.com/gandelm/gandelm/config"
+	adapter "github.com/gandelm/gandelm/internal/adapter/k8s/controller"
 	"github.com/gandelm/gandelm/internal/adapter/k8s/controller/gandelmcatalog"
 	"github.com/gandelm/gandelm/internal/container"
 	// +kubebuilder:scaffold:imports
@@ -227,6 +228,14 @@ func main() {
 		Client:    mgr.GetClient(),
 		Scheme:    mgr.GetScheme(),
 		Container: container,
+	}).SetupWithManager(mgr); err != nil {
+		setupLog.Error(err, "unable to create controller", "controller", "GandelmCatalog")
+		os.Exit(1)
+	}
+
+	if err = (&adapter.GandelmReconciler{
+		Client: mgr.GetClient(),
+		Scheme: mgr.GetScheme(),
 	}).SetupWithManager(mgr); err != nil {
 		setupLog.Error(err, "unable to create controller", "controller", "GandelmCatalog")
 		os.Exit(1)

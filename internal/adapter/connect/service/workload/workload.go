@@ -28,8 +28,14 @@ func (w *WorkloadService) Get(ctx context.Context, req *connect.Request[workload
 		return nil, err
 	}
 
+	deploymentList, err := provider.NewDeploymentRORepository(w.container).FindAll(ctx, req.Msg.CatalogId)
+	if err != nil {
+		return nil, err
+	}
+
 	return connect.NewResponse(&workloadv1.GetResponse{
-		Workload: converter.MakeWorkloadPb(workload),
+		Workload:    converter.MakeWorkloadPb(workload),
+		Deployments: converter.MakeDeploymentsPb(deploymentList.Items),
 	}), nil
 }
 
@@ -40,7 +46,13 @@ func (w *WorkloadService) List(ctx context.Context, req *connect.Request[workloa
 		return nil, err
 	}
 
+	deploymentList, err := provider.NewDeploymentRORepository(w.container).FindAll(ctx, req.Msg.CatalogId)
+	if err != nil {
+		return nil, err
+	}
+
 	return connect.NewResponse(&workloadv1.ListResponse{
-		Workloads: converter.MakeWorkloadsPb(workloads),
+		Workloads:   converter.MakeWorkloadsPb(workloads),
+		Deployments: converter.MakeDeploymentsPb(deploymentList.Items),
 	}), nil
 }

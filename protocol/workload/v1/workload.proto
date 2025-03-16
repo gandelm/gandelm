@@ -10,14 +10,20 @@ service WorkloadService {
 }
 
 message ListRequest { string catalog_id = 1; }
-message ListResponse { repeated Workload workloads = 1; }
+message ListResponse {
+  repeated Workload workloads = 1;
+  repeated Deployment deployments = 2;
+}
 
 message GetRequest {
   string catalog_id = 1;
   string workload_id = 2;
 }
 
-message GetResponse { Workload workload = 1; }
+message GetResponse {
+  Workload workload = 1;
+  repeated Deployment deployments = 2;
+}
 
 message Workload {
   string workload_id = 1;
@@ -31,8 +37,21 @@ message ExternalLink {
   string url = 2;
 }
 
-message ArtifactWithObject {
-  catalog.v1.Artifact artifact = 1;
-  string version = 2;
-  string url = 3;
+message Deployment {
+  repeated Container containers = 1;
+  ReplicaStatus replica_status = 2;
+  string message = 3;
+}
+
+message Container {
+  string image = 1;
+  string name = 2;
+  bool is_init = 3;
+}
+
+message ReplicaStatus {
+  uint32 desired = 1;
+  uint32 available = 2;
+  uint32 ready = 3;
+  uint32 updated = 4;
 }
