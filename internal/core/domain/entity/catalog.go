@@ -15,8 +15,6 @@ type Catalog struct {
 	Priority    int
 	WorkloadID  WorkloadID
 
-	Artifacts ArtifactTag
-
 	CreatedAt time.Time
 	UpdatedAt time.Time
 }

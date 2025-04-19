@@ -1,21 +1,14 @@
 package entity
 
-type Artifact struct {
-	Name    string
-	Type    ArtifactType
-	Version string
-	URL     string
-}
+import artifactv1 "github.com/gandelm/gandelm/generated/protocol/artifact/v1"
 
+type ArtifactType = artifactv1.ArtifactType
+
+type ArtifactID string
 type Artifacts []*Artifact
-
-func (a Artifacts) ToTags() ArtifactTag {
-	tags := make(ArtifactTag)
-	for _, artifact := range a {
-		tags[artifact.Name] = artifact.Name
-	}
-
-	return tags
+type Artifact struct {
+	ID          ArtifactID
+	Title       string
+	Description string
+	Type        ArtifactType
 }
-
-type ArtifactTag map[string]string

@@ -21,7 +21,6 @@ message CreateRequest {
   string name = 2;
   string description = 3;
   uint32 priority = 4;
-  repeated Artifact artifacts = 5;
 }
 
 message CreateResponse { Catalog catalog = 1; }
@@ -43,21 +42,4 @@ message Catalog {
   uint32 priority = 6;
   google.protobuf.Timestamp created_at = 7;
   google.protobuf.Timestamp updated_at = 8;
-}
-
-message Artifact {
-  string name = 1;
-  ArtifactType type = 2;
-  string tag = 3;
-}
-
-enum ArtifactType {
-  // UNKNOWN is the default value and should not be used.
-  ARTIFACT_TYPE_UNSPECIFIED = 0;
-
-  // CONTAINER_IMAGE represents a container image artifact.
-  ARTIFACT_TYPE_CONTAINER_IMAGE = 1;
-
-  // ASSET represents a generic asset artifact.
-  ARTIFACT_TYPE_ASSET = 2;
 }
