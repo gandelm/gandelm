@@ -8,27 +8,32 @@ import (
 	"github.com/gandelm/gandelm/generated/protocol/workload/v1/workloadv1connect"
 	"github.com/gandelm/gandelm/internal/container"
 	"github.com/gandelm/gandelm/internal/converter"
+	"github.com/gandelm/gandelm/internal/core/domain/repository"
 	"github.com/gandelm/gandelm/internal/provider"
 )
 
 var _ workloadv1connect.WorkloadServiceHandler = (*WorkloadService)(nil)
 
 func NewWorkloadService(container container.Containerer) *WorkloadService {
-	return &WorkloadService{container: container}
+	return &WorkloadService{
+		workloadRORepository:   provider.NewWorkloadRORepository(container),
+		deploymentRORepository: provider.NewDeploymentRORepository(container),
+	}
 }
 
 type WorkloadService struct {
-	container container.Containerer
+	workloadRORepository   repository.WorkloadRORepository
+	deploymentRORepository repository.DeploymentRORepository
 }
 
 // Get implements workloadv1connect.WorkloadServiceHandler.
 func (w *WorkloadService) Get(ctx context.Context, req *connect.Request[workloadv1.GetRequest]) (*connect.Response[workloadv1.GetResponse], error) {
-	workload, err := provider.NewWorkloadRORepository(w.container).Find(ctx, req.Msg.CatalogId, req.Msg.WorkloadId)
+	workload, err := w.workloadRORepository.Find(ctx, req.Msg.CatalogId, req.Msg.WorkloadId)
 	if err != nil {
 		return nil, err
 	}
 
-	deploymentList, err := provider.NewDeploymentRORepository(w.container).FindAll(ctx, req.Msg.CatalogId)
+	deploymentList, err := w.deploymentRORepository.FindAll(ctx, req.Msg.CatalogId)
 	if err != nil {
 		return nil, err
 	}
@@ -41,12 +46,12 @@ func (w *WorkloadService) Get(ctx context.Context, req *connect.Request[workload
 
 // List implements workloadv1connect.WorkloadServiceHandler.
 func (w *WorkloadService) List(ctx context.Context, req *connect.Request[workloadv1.ListRequest]) (*connect.Response[workloadv1.ListResponse], error) {
-	workloads, err := provider.NewWorkloadRORepository(w.container).FindAll(ctx, req.Msg.CatalogId)
+	workloads, err := w.workloadRORepository.FindAll(ctx, req.Msg.CatalogId)
 	if err != nil {
 		return nil, err
 	}
 
-	deploymentList, err := provider.NewDeploymentRORepository(w.container).FindAll(ctx, req.Msg.CatalogId)
+	deploymentList, err := w.deploymentRORepository.FindAll(ctx, req.Msg.CatalogId)
 	if err != nil {
 		return nil, err
 	}

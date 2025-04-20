@@ -18,7 +18,6 @@ var _ catalogv1connect.CatalogServiceHandler = (*CatalogService)(nil)
 
 func NewCatalogService(container container.Containerer) *CatalogService {
 	return &CatalogService{
-		container:         container,
 		catalogCreator:    provider.NewCatalogCreator(container),
 		catalogUpdator:    provider.NewCatalogUpdator(container),
 		catalogRepository: provider.NewCatalogRWRepository(container),
@@ -26,7 +25,6 @@ func NewCatalogService(container container.Containerer) *CatalogService {
 }
 
 type CatalogService struct {
-	container         container.Containerer
 	catalogCreator    usecase.CatalogCreator
 	catalogUpdator    usecase.CatalogUpdator
 	catalogRepository repository.CatalogRWRepository
