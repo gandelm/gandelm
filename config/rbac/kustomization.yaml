@@ -22,6 +22,9 @@ resources:
 # default, aiding admins in cluster management. Those roles are
 # not used by the {{ .ProjectName }} itself. You can comment the following lines
 # if you do not want those helpers be installed with your Project.
+- gandelmlabel_admin_role.yaml
+- gandelmlabel_editor_role.yaml
+- gandelmlabel_viewer_role.yaml
 - gandelm_admin_role.yaml
 - gandelm_editor_role.yaml
 - gandelm_viewer_role.yaml

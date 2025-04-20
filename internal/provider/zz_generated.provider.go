@@ -34,3 +34,11 @@ func NewCatalogRWRepository(container container.Containerer) repository.CatalogR
 func NewWorkloadRORepository(container container.Containerer) repository.WorkloadRORepository {
 	return etcd.NewWorkloadRORepository(container)
 }
+
+func NewLabelRORepository(container container.Containerer) repository.LabelRORepository {
+	return etcd.NewLabelRORepository(container)
+}
+
+func NewLabelRWRepository(container container.Containerer) repository.LabelRWRepository {
+	return etcd.NewLabelRepository(container)
+}
