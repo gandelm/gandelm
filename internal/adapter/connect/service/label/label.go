@@ -17,13 +17,11 @@ var _ labelv1connect.LabelServiceHandler = (*LabelService)(nil)
 
 func NewLabelService(container container.Containerer) *LabelService {
 	return &LabelService{
-		container:       container,
 		labelRepository: provider.NewLabelRWRepository(container),
 	}
 }
 
 type LabelService struct {
-	container       container.Containerer
 	labelRepository repository.LabelRWRepository
 }
 
