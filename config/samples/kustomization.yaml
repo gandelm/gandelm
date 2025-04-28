@@ -3,4 +3,5 @@ resources:
 - v1_gandelmcatalog.yaml
 - v1_gandelm.yaml
 - v1_gandelmlabel.yaml
+- v1_gandelmversion.yaml
 # +kubebuilder:scaffold:manifestskustomizesamples
