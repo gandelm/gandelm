@@ -39,10 +39,24 @@ spec:
           spec:
             description: GandelmVersionSpec defines the desired state of GandelmVersion.
             properties:
-              foo:
-                description: Foo is an example field of GandelmVersion. Edit gandelmversion_types.go
-                  to remove/update
+              base_artifacts:
+                additionalProperties:
+                  type: string
+                type: object
+              base_priority:
+                format: int32
+                type: integer
+              created_at:
+                format: date-time
                 type: string
+              updated_at:
+                format: date-time
+                type: string
+            required:
+            - base_artifacts
+            - base_priority
+            - created_at
+            - updated_at
             type: object
           status:
             description: GandelmVersionStatus defines the observed state of GandelmVersion.

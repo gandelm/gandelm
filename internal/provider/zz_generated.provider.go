@@ -42,3 +42,11 @@ func NewLabelRORepository(container container.Containerer) repository.LabelRORep
 func NewLabelRWRepository(container container.Containerer) repository.LabelRWRepository {
 	return etcd.NewLabelRepository(container)
 }
+
+func NewVersionRORepository(container container.Containerer) repository.VersionRORepository {
+	return etcd.NewVersionRORepository(container)
+}
+
+func NewVersionRWRepository(container container.Containerer) repository.VersionRWRepository {
+	return etcd.NewVersionRepository(container)
+}

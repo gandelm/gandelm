@@ -30,6 +30,8 @@ type GandelmVersionSpec struct {
 
 	BaseArtifacts map[string]string `json:"base_artifacts"`
 	BasePriority  uint32            `json:"base_priority"`
+	CreatedAt     metav1.Time       `json:"created_at"`
+	UpdatedAt     metav1.Time       `json:"updated_at"`
 }
 
 // GandelmVersionStatus defines the observed state of GandelmVersion.
