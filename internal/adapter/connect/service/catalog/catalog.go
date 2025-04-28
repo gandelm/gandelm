@@ -36,12 +36,14 @@ func (c *CatalogService) Create(ctx context.Context, request *connect.Request[ca
 	description := request.Msg.GetDescription()
 	version := request.Msg.GetVersion()
 	name := request.Msg.GetName()
+	labels := request.Msg.GetLabels()
 
 	o, err := c.catalogCreator.Execute(ctx, &usecase.CatalogCreateInput{
 		Priority:    int(priority),
 		Description: description,
 		Version:     version,
 		Name:        name,
+		Labels:      labels,
 	})
 	if err != nil {
 		return nil, err

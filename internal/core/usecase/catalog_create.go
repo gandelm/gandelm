@@ -17,6 +17,7 @@ type CatalogCreateInput struct {
 	Description string
 	Version     string
 	Name        string
+	Labels      []string
 }
 
 type CatalogCreateOutput struct {
@@ -42,6 +43,7 @@ func (c *CatalogCreate) Execute(ctx context.Context, input *CatalogCreateInput) 
 		Version:     input.Version,
 		Description: input.Description,
 		Priority:    input.Priority,
+		Labels:      input.Labels,
 		WorkloadID:  entity.NewWorkloadID(input.Version, input.Name),
 	}
 

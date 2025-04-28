@@ -14,6 +14,7 @@ type Catalog struct {
 	Description string
 	Priority    int
 	WorkloadID  WorkloadID
+	Labels      []string
 
 	CreatedAt time.Time
 	UpdatedAt time.Time

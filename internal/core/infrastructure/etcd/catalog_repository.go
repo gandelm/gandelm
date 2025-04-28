@@ -60,6 +60,7 @@ func (c *CatalogRepository) Create(ctx context.Context, catalog *entity.Catalog)
 		Version:     catalog.Version,
 		Description: catalog.Description,
 		Priority:    uint32(catalog.Priority),
+		Labels:      catalog.Labels,
 		CreatedAt:   metav1.Time{Time: now},
 		UpdatedAt:   metav1.Time{Time: now},
 	}

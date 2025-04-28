@@ -21,6 +21,7 @@ message CreateRequest {
   string name = 2;
   string description = 3;
   uint32 priority = 4;
+  repeated string labels = 5;
 }
 
 message CreateResponse { Catalog catalog = 1; }
@@ -40,6 +41,7 @@ message Catalog {
   string description = 4;
   string version = 5;
   uint32 priority = 6;
-  google.protobuf.Timestamp created_at = 7;
-  google.protobuf.Timestamp updated_at = 8;
+  repeated string labels = 7;
+  google.protobuf.Timestamp created_at = 8;
+  google.protobuf.Timestamp updated_at = 9;
 }

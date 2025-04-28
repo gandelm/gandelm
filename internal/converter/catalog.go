@@ -16,6 +16,7 @@ func MakeCatalogPb(catalog *entity.Catalog) *catalogv1.Catalog {
 		Version:     catalog.Version,
 		Description: catalog.Description,
 		Priority:    uint32(catalog.Priority),
+		Labels:      catalog.Labels,
 		CreatedAt:   timestamppb.New(catalog.CreatedAt),
 		UpdatedAt:   timestamppb.New(catalog.UpdatedAt),
 	}
@@ -38,6 +39,7 @@ func MakeCatalog(catalog *v1.GandelmCatalog) *entity.Catalog {
 		Version:     catalog.Spec.Version,
 		Description: catalog.Spec.Description,
 		Priority:    int(catalog.Spec.Priority),
+		Labels:      catalog.Spec.Labels,
 		CreatedAt:   catalog.Spec.CreatedAt.Time,
 		UpdatedAt:   catalog.Spec.UpdatedAt.Time,
 	}
