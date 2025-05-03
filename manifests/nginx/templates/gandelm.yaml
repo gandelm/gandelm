@@ -10,3 +10,8 @@ spec:
       url: https://{{ .Release.Namespace }}.core-api.dev.example.com
     - title: '管理ツール'
       url: https://{{ .Release.Namespace }}.admin.dev.example.com
+  artifacts:
+    - id: 'core-api'
+      version: 'hogehoge'
+    - id: 'admin'
+      version: 'hogehoge2'

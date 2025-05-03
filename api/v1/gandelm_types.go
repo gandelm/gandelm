@@ -32,11 +32,17 @@ type GandelmSpec struct {
 	Entrypoint string `json:"entrypoint"`
 
 	ExternalLinks []ExternalLink `json:"external_links,omitempty"`
+	Artifacts     []Artifacts    `json:"artifacts,omitempty"`
 }
 
 type ExternalLink struct {
 	Title string `json:"title"`
 	URL   string `json:"url"`
+}
+
+type Artifacts struct {
+	ID      string `json:"id"`
+	Version string `json:"version"`
 }
 
 // GandelmStatus defines the observed state of Gandelm.
