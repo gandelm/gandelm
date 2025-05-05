@@ -23,14 +23,30 @@ import (
 // EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
 // NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
 
-// GandelmSpec defines the desired state of Gandelm.
-type GandelmSpec struct {
+// GandelmWorkloadSpec defines the desired state of GandelmWorkload.
+type GandelmWorkloadSpec struct {
 	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
+
+	Endpoint   string `json:"endpoint"`
+	Entrypoint string `json:"entrypoint"`
+
+	ExternalLinks []ExternalLink `json:"external_links,omitempty"`
+	Artifacts     []Artifacts    `json:"artifacts,omitempty"`
 }
 
-// GandelmStatus defines the observed state of Gandelm.
-type GandelmStatus struct {
+type ExternalLink struct {
+	Title string `json:"title"`
+	URL   string `json:"url"`
+}
+
+type Artifacts struct {
+	ID      string `json:"id"`
+	Version string `json:"version"`
+}
+
+// GandelmWorkloadStatus defines the observed state of GandelmWorkload.
+type GandelmWorkloadStatus struct {
 	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
 }
@@ -38,24 +54,24 @@ type GandelmStatus struct {
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
 
-// Gandelm is the Schema for the gandelms API.
-type Gandelm struct {
+// GandelmWorkload is the Schema for the gandelmworkloads API.
+type GandelmWorkload struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec   GandelmSpec   `json:"spec,omitempty"`
-	Status GandelmStatus `json:"status,omitempty"`
+	Spec   GandelmWorkloadSpec   `json:"spec,omitempty"`
+	Status GandelmWorkloadStatus `json:"status,omitempty"`
 }
 
 // +kubebuilder:object:root=true
 
-// GandelmList contains a list of Gandelm.
-type GandelmList struct {
+// GandelmWorkloadList contains a list of GandelmWorkload.
+type GandelmWorkloadList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []Gandelm `json:"items"`
+	Items           []GandelmWorkload `json:"items"`
 }
 
 func init() {
-	SchemeBuilder.Register(&Gandelm{}, &GandelmList{})
+	SchemeBuilder.Register(&GandelmWorkload{}, &GandelmWorkloadList{})
 }

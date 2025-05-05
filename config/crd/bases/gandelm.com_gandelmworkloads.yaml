@@ -4,20 +4,20 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.17.1
-  name: gandelms.gandelm.com
+  name: gandelmworkloads.gandelm.com
 spec:
   group: gandelm.com
   names:
-    kind: Gandelm
-    listKind: GandelmList
-    plural: gandelms
-    singular: gandelm
+    kind: GandelmWorkload
+    listKind: GandelmWorkloadList
+    plural: gandelmworkloads
+    singular: gandelmworkload
   scope: Namespaced
   versions:
   - name: v1
     schema:
       openAPIV3Schema:
-        description: Gandelm is the Schema for the gandelms API.
+        description: GandelmWorkload is the Schema for the gandelmworkloads API.
         properties:
           apiVersion:
             description: |-
@@ -37,10 +37,42 @@ spec:
           metadata:
             type: object
           spec:
-            description: GandelmSpec defines the desired state of Gandelm.
+            description: GandelmWorkloadSpec defines the desired state of GandelmWorkload.
+            properties:
+              artifacts:
+                items:
+                  properties:
+                    id:
+                      type: string
+                    version:
+                      type: string
+                  required:
+                  - id
+                  - version
+                  type: object
+                type: array
+              endpoint:
+                type: string
+              entrypoint:
+                type: string
+              external_links:
+                items:
+                  properties:
+                    title:
+                      type: string
+                    url:
+                      type: string
+                  required:
+                  - title
+                  - url
+                  type: object
+                type: array
+            required:
+            - endpoint
+            - entrypoint
             type: object
           status:
-            description: GandelmStatus defines the observed state of Gandelm.
+            description: GandelmWorkloadStatus defines the observed state of GandelmWorkload.
             type: object
         type: object
     served: true

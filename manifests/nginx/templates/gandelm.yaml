@@ -1,5 +1,5 @@
 apiVersion: gandelm.com/v1
-kind: Gandelm
+kind: GandelmWorkload
 metadata:
   name: {{ .Release.Name }}
 spec:

@@ -6,6 +6,7 @@ resources:
 - bases/gandelm.com_gandelms.yaml
 - bases/gandelm.com_gandelmlabels.yaml
 - bases/gandelm.com_gandelmversions.yaml
+- bases/gandelm.com_gandelmworkloads.yaml
 # +kubebuilder:scaffold:crdkustomizeresource
 
 patches:

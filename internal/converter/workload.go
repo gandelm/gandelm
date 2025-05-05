@@ -36,7 +36,7 @@ func MakeWorkloadsPb(workloads entity.Workloads) []*workloadv1.Workload {
 	return results
 }
 
-func MakeWorkload(workload *v1.Gandelm) *entity.Workload {
+func MakeWorkload(workload *v1.GandelmWorkload) *entity.Workload {
 	externalLinks := make([]*entity.ExternalLink, 0, len(workload.Spec.ExternalLinks))
 	for _, link := range workload.Spec.ExternalLinks {
 		externalLinks = append(externalLinks, &entity.ExternalLink{
@@ -53,7 +53,7 @@ func MakeWorkload(workload *v1.Gandelm) *entity.Workload {
 	}
 }
 
-func MakeWorkloads(workload []v1.Gandelm) entity.Workloads {
+func MakeWorkloads(workload []v1.GandelmWorkload) entity.Workloads {
 	results := make(entity.Workloads, 0, len(workload))
 	for _, w := range workload {
 		results = append(results, MakeWorkload(&w))

@@ -21,7 +21,7 @@ type WorkloadRORepository struct {
 
 // Find implements repository.WorkloadRORepository.
 func (w *WorkloadRORepository) Find(ctx context.Context, namespace string, id entity.WorkloadID) (*entity.Workload, error) {
-	workload := &v1.Gandelm{}
+	workload := &v1.GandelmWorkload{}
 	if err := w.db.Get(ctx, types.NamespacedName{
 		Namespace: namespace,
 		Name:      id,
@@ -34,7 +34,7 @@ func (w *WorkloadRORepository) Find(ctx context.Context, namespace string, id en
 
 // FindAll implements repository.WorkloadRORepository.
 func (w *WorkloadRORepository) FindAll(ctx context.Context, namespace string) (entity.Workloads, error) {
-	list := &v1.GandelmList{}
+	list := &v1.GandelmWorkloadList{}
 	if err := w.db.List(ctx, list, client.InNamespace(namespace)); err != nil {
 		return nil, err
 	}

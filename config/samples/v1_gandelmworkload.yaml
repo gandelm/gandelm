@@ -1,0 +1,9 @@
+apiVersion: gandelm.com/v1
+kind: GandelmWorkload
+metadata:
+  labels:
+    app.kubernetes.io/name: gandelm
+    app.kubernetes.io/managed-by: kustomize
+  name: gandelmworkload-sample
+spec:
+  # TODO(user): Add fields here
