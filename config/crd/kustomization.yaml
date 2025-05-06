@@ -7,6 +7,7 @@ resources:
 - bases/gandelm.com_gandelmlabels.yaml
 - bases/gandelm.com_gandelmversions.yaml
 - bases/gandelm.com_gandelmworkloads.yaml
+- bases/gandelm.com_gandelmartifacts.yaml
 # +kubebuilder:scaffold:crdkustomizeresource
 
 patches:

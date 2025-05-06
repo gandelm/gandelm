@@ -55,14 +55,15 @@ func (c *CatalogRepository) Create(ctx context.Context, catalog *entity.Catalog)
 	now := time.Now()
 
 	model.Spec = v1.GandelmCatalogSpec{
-		ID:          catalog.WorkloadID,
-		Name:        catalog.Name,
-		Version:     catalog.Version,
-		Description: catalog.Description,
-		Priority:    uint32(catalog.Priority),
-		Labels:      catalog.Labels,
-		CreatedAt:   metav1.Time{Time: now},
-		UpdatedAt:   metav1.Time{Time: now},
+		ID:           catalog.WorkloadID,
+		Name:         catalog.Name,
+		Version:      catalog.Version,
+		Description:  catalog.Description,
+		Priority:     uint32(catalog.Priority),
+		Labels:       catalog.Labels,
+		ArtifactTags: catalog.ArtifactTags,
+		CreatedAt:    metav1.Time{Time: now},
+		UpdatedAt:    metav1.Time{Time: now},
 	}
 
 	return c.db.Create(ctx, &model)
@@ -80,12 +81,13 @@ func (c *CatalogRepository) Update(ctx context.Context, catalog *entity.Catalog)
 	now := time.Now()
 
 	model.Spec = v1.GandelmCatalogSpec{
-		ID:          catalog.WorkloadID,
-		Name:        catalog.Name,
-		Version:     catalog.Version,
-		Description: catalog.Description,
-		Priority:    uint32(catalog.Priority),
-		UpdatedAt:   metav1.Time{Time: now},
+		ID:           catalog.WorkloadID,
+		Name:         catalog.Name,
+		Version:      catalog.Version,
+		Description:  catalog.Description,
+		ArtifactTags: catalog.ArtifactTags,
+		Priority:     uint32(catalog.Priority),
+		UpdatedAt:    metav1.Time{Time: now},
 	}
 
 	return c.db.Update(ctx, &model)

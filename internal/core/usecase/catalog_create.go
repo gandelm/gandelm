@@ -18,6 +18,7 @@ type CatalogCreateInput struct {
 	Version     string
 	Name        string
 	Labels      []string
+	Artifacts   map[string]string
 }
 
 type CatalogCreateOutput struct {
@@ -38,13 +39,14 @@ func NewCatalogCreate(
 
 func (c *CatalogCreate) Execute(ctx context.Context, input *CatalogCreateInput) (*CatalogCreateOutput, error) {
 	catalog := &entity.Catalog{
-		ID:          uuid.New(),
-		Name:        input.Name,
-		Version:     input.Version,
-		Description: input.Description,
-		Priority:    input.Priority,
-		Labels:      input.Labels,
-		WorkloadID:  entity.NewWorkloadID(input.Version, input.Name),
+		ID:           uuid.New(),
+		Name:         input.Name,
+		Version:      input.Version,
+		Description:  input.Description,
+		Priority:     input.Priority,
+		Labels:       input.Labels,
+		ArtifactTags: input.Artifacts,
+		WorkloadID:   entity.NewWorkloadID(input.Version, input.Name),
 	}
 
 	if err := c.catalogRWRepository.Create(ctx, catalog); err != nil {

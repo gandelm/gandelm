@@ -37,6 +37,12 @@ func (c *CatalogService) Create(ctx context.Context, request *connect.Request[ca
 	version := request.Msg.GetVersion()
 	name := request.Msg.GetName()
 	labels := request.Msg.GetLabels()
+	artifacts := request.Msg.GetArtifacts()
+
+	artifactsInput := make(map[string]string)
+	for _, artifact := range artifacts {
+		artifactsInput[artifact.GetId()] = artifact.GetValue()
+	}
 
 	o, err := c.catalogCreator.Execute(ctx, &usecase.CatalogCreateInput{
 		Priority:    int(priority),
@@ -44,6 +50,7 @@ func (c *CatalogService) Create(ctx context.Context, request *connect.Request[ca
 		Version:     version,
 		Name:        name,
 		Labels:      labels,
+		Artifacts:   artifactsInput,
 	})
 	if err != nil {
 		return nil, err

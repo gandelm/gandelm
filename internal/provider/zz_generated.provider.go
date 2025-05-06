@@ -50,3 +50,11 @@ func NewVersionRORepository(container container.Containerer) repository.VersionR
 func NewVersionRWRepository(container container.Containerer) repository.VersionRWRepository {
 	return etcd.NewVersionRepository(container)
 }
+
+func NewArtifactRORepository(container container.Containerer) repository.ArtifactRORepository {
+	return etcd.NewArtifactRORepository(container)
+}
+
+func NewArtifactRepository(container container.Containerer) repository.ArtifactRWRepository {
+	return etcd.NewArtifactRepository(container)
+}

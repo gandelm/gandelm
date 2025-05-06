@@ -17,11 +17,16 @@ message GetRequest { string catalog_id = 1; }
 message GetResponse { Catalog catalog = 1; }
 
 message CreateRequest {
+  message Artifact {
+    string id = 1;
+    string value = 2;
+  }
   string version = 1;
   string name = 2;
   string description = 3;
   uint32 priority = 4;
   repeated string labels = 5;
+  repeated Artifact artifacts = 6;
 }
 
 message CreateResponse { Catalog catalog = 1; }

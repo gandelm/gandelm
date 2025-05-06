@@ -33,15 +33,16 @@ func MakeCatalogsPb(catalogs entity.Catalogs) []*catalogv1.Catalog {
 
 func MakeCatalog(catalog *v1.GandelmCatalog) *entity.Catalog {
 	return &entity.Catalog{
-		ID:          uuid.MustParse(catalog.Name),
-		WorkloadID:  catalog.Spec.ID,
-		Name:        catalog.Spec.Name,
-		Version:     catalog.Spec.Version,
-		Description: catalog.Spec.Description,
-		Priority:    int(catalog.Spec.Priority),
-		Labels:      catalog.Spec.Labels,
-		CreatedAt:   catalog.Spec.CreatedAt.Time,
-		UpdatedAt:   catalog.Spec.UpdatedAt.Time,
+		ID:           uuid.MustParse(catalog.Name),
+		WorkloadID:   catalog.Spec.ID,
+		Name:         catalog.Spec.Name,
+		Version:      catalog.Spec.Version,
+		Description:  catalog.Spec.Description,
+		Priority:     int(catalog.Spec.Priority),
+		Labels:       catalog.Spec.Labels,
+		ArtifactTags: catalog.Spec.ArtifactTags,
+		CreatedAt:    catalog.Spec.CreatedAt.Time,
+		UpdatedAt:    catalog.Spec.UpdatedAt.Time,
 	}
 }
 

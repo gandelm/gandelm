@@ -1,8 +1,12 @@
 package entity
 
-import artifactv1 "github.com/gandelm/gandelm/generated/protocol/artifact/v1"
+import (
+	"time"
 
-type ArtifactType = artifactv1.ArtifactType
+	constantv1 "github.com/gandelm/gandelm/generated/protocol/constant/v1"
+)
+
+type ArtifactType = constantv1.ArtifactType
 
 type ArtifactID string
 type Artifacts []*Artifact
@@ -11,4 +15,6 @@ type Artifact struct {
 	Title       string
 	Description string
 	Type        ArtifactType
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
 }

@@ -7,7 +7,7 @@ import (
 )
 
 type ArtifactRORepository interface {
-	Find(ctx context.Context, id entity.ArtifactID) (entity.Artifacts, error)
+	Find(ctx context.Context, id entity.ArtifactID) (*entity.Artifact, error)
 	FindAll(ctx context.Context) (entity.Artifacts, error)
 }
 
